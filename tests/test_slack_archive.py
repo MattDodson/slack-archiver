@@ -3,7 +3,7 @@ import os
 import shutil
 import json
 import datetime
-from slackbot import slack_archive
+from slack_archive import slack_archive
 from unittest.mock import MagicMock, patch, call
 
 
@@ -24,7 +24,7 @@ class RetrieveMessagesTestSuite(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @patch('slackbot.slack_archive.sleep')
+    @patch('slack_archive.slack_archive.sleep')
     def test_retrieve_messages(self, mock_sleep):
         self.pageable_object.history.side_effect = self.response
         actual = slack_archive.retrieve_messages(self.pageable_object, self.channel_id, self.last_time)
@@ -123,7 +123,7 @@ class ParseAndSaveMessagesTestSuite(unittest.TestCase):
         remove(self.folder_path)
         remove(self.new_folder)
 
-    @patch('slackbot.slack_archive.channel_rename')
+    @patch('slack_archive.slack_archive.channel_rename')
     def test_no_name_change(self, mocked_rename):
         slack_archive.parse_and_save_messages(self.folder_path, self.messages1, self.channel_type)
 
@@ -175,9 +175,9 @@ class DownloadChannelsTestSuite(unittest.TestCase):
     def tearDown(self):
         remove(self.folder_path)
 
-    @patch('slackbot.slack_archive.retrieve_messages')
-    @patch('slackbot.slack_archive.parse_and_save_messages')
-    @patch('slackbot.slack_archive.sleep')
+    @patch('slack_archive.slack_archive.retrieve_messages')
+    @patch('slack_archive.slack_archive.parse_and_save_messages')
+    @patch('slack_archive.slack_archive.sleep')
     def test_download_channels(self, mocked_sleep, mocked_parse, mocked_retrieve):
         # Verify folder doesn't exist and set up the return value of the retrieve messages
         self.assertFalse(os.path.exists(self.folder_path))
@@ -236,7 +236,7 @@ class BootstrapKeyValuesTestSuite(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @patch('slackbot.slack_archive.sleep', return_value=None)
+    @patch('slack_archive.slack_archive.sleep', return_value=None)
     def test_basic(self, mocked_time):
         fake_connection = MagicMock()
         fake_connection.users.list.return_value.body.__getitem__.return_value = self.users

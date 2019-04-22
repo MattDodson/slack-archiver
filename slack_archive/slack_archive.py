@@ -2,7 +2,7 @@ import json
 import os
 import shutil
 from slacker import Slacker
-from slackbot.config import settings, the_crypter
+from slack_archive.config import settings, the_crypter
 from datetime import datetime
 from time import sleep
 import re

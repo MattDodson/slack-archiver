@@ -1,6 +1,6 @@
 import yaml
 import os
-from slackbot.security import Security
+from slack_archive.security import Security
 
 parent_dir = os.path.dirname(__file__)
 
