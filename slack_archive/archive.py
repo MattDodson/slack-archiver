@@ -31,7 +31,6 @@ def retrieve_messages(pageable_object, channel_id, last_time, page_size=100):
             oldest=last_time,
             count=page_size).body
         # Response has keys of ok, messages, and has_more
-        print(response)
         messages.extend(response['messages'])
 
         if response['has_more']:
@@ -84,6 +83,7 @@ def parse_and_save_messages(folder_path, messages, channel_type):
     :type channel_type: str
     :return: None
     """
+    print(folder_path)
     name_change_flag = channel_type + "_name"
 
     current_file_date = ''
@@ -107,7 +107,8 @@ def parse_and_save_messages(folder_path, messages, channel_type):
             old_name = message['old_name']
             new_name = message['name']
             channel_rename(old_name, new_name)
-            folder_path = new_name
+            # folder_path = new_name
+            # print('rename')
 
         current_messages.append(message)
     out_file_name = '{room}/{file}.json'.format(room=folder_path, file=current_file_date)
@@ -146,6 +147,7 @@ def _to_json(data_to_save, file_path):
     :type file_path: str
     :return: None
     """
+    print(file_path)
     with open(file_path, 'w') as write_file:
         json.dump(data_to_save, write_file, indent=4)
 
@@ -160,7 +162,6 @@ def bootstrap_key_values(slack_connection):
     user_list = slack_connection.users.list().body['members']
     print("Found {0} Users".format(len(user_list)))
     sleep(2)
-    print(sleep)
 
     channel_list = slack_connection.channels.list().body['channels']
     print("Found {0} Public Channels".format(len(channel_list)))
@@ -385,6 +386,10 @@ def merge_archives(destination_folder, new_data_folder):
     :return: True if the merge occurred correctly and the source folder was deleted. false otherwise
     :rtype: False
     """
+    if not os.path.exists(destination_folder):
+        os.rename(new_data_folder, destination_folder)
+        return True
+
     result = False
     paired_channels = pair_channels(os.listdir(destination_folder), os.listdir(new_data_folder))
     for i in paired_channels:
